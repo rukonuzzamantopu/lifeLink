@@ -99,3 +99,89 @@ window.addEventListener("scroll", () => {
         }
     });
 });
+
+
+/* =========================================
+   LOGIN SYSTEM WITH VALIDATION
+========================================= */
+
+function login() {
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value.trim();
+    let errorBox = document.getElementById("login-error");
+
+    // Empty check
+    if (email === "" || password === "") {
+        showError("Please enter both email and password.");
+        return;
+    }
+
+    // Basic email format check
+    if (!email.includes("@") || !email.includes(".")) {
+        showError("Invalid email format.");
+        return;
+    }
+
+    /* 
+       DEMO LOGIN ACCOUNT:
+       Email: user@gmail.com
+       Password: 12345
+    */
+    if (email === "user@gmail.com" && password === "12345") {
+        
+        // Save login state
+        localStorage.setItem("loggedIn", "true");
+
+        // Smooth success animation
+        errorBox.style.color = "#7fffd4";
+        errorBox.innerHTML = "Login successful! Redirecting...";
+        errorBox.style.display = "block";
+
+        setTimeout(() => {
+            window.location = "dashboard.html";
+        }, 1200);
+
+    } else {
+        showError("Incorrect email or password.");
+    }
+}
+
+function showError(msg) {
+    let errorBox = document.getElementById("login-error");
+    errorBox.style.display = "block";
+    errorBox.style.color = "#ff6666";
+    errorBox.innerHTML = msg;
+
+    // Shake animation
+    errorBox.style.animation = "shake 0.3s";
+    setTimeout(() => { errorBox.style.animation = ""; }, 300);
+}
+
+/* Shake Animation */
+let style = document.createElement("style");
+style.innerHTML = `
+@keyframes shake {
+  0% { transform: translateX(0px); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0px); }
+}
+`;
+document.head.appendChild(style);
+
+
+/* =========================================
+   CHECK LOGIN BEFORE ACCESSING DASHBOARD
+========================================= */
+
+function checkLogin() {
+    let isLoggedIn = localStorage.getItem("loggedIn");
+
+    if (isLoggedIn !== "true") {
+        alert("Please login first!");
+        window.location = "login.html";
+    }
+}
+
+/* Call checkLogin() inside dashboard.html */
